@@ -16,18 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.compose.motion.theme.motionScheme
-import com.compose.motion.theme.slowSpatial
-import com.compose.motion.theme.slowEffects
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -67,7 +64,7 @@ fun MotionLaunch(
                                    scaleOut(targetScale = 1.1f, animationSpec = scheme.slowSpatialSpec())
             LaunchStyle.SlideUp -> slideOutVertically(animationSpec = scheme.slowSpatialSpec()) { -it } +
                                  fadeOut(animationSpec = scheme.slowEffectsSpec())
-            LaunchStyle.HolographicPulse, LaunchStyle.OrbitalConverge, LaunchStyle.LiquidGlassMorph ->
+            else ->
                 fadeOut(animationSpec = scheme.slowEffectsSpec()) +
                 scaleOut(targetScale = 1.2f, animationSpec = scheme.slowSpatialSpec())
         },
@@ -88,6 +85,12 @@ fun MotionLaunch(
                 }
                 LaunchStyle.LiquidGlassMorph -> {
                     LiquidGlassEffect(content = content)
+                }
+                LaunchStyle.AuroraGradient -> {
+                    AuroraEffect(content = content)
+                }
+                LaunchStyle.KineticScan -> {
+                    ScanEffect(content = content)
                 }
                 else -> content()
             }
@@ -123,27 +126,23 @@ private fun HolographicEffect(content: @Composable () -> Unit) {
         modifier = Modifier
             .scale(pulseScale)
             .graphicsLayer {
-                // Soft holographic glow
                 shadowElevation = 20f
                 spotShadowColor = Color.Cyan.copy(alpha = 0.5f)
             },
         contentAlignment = Alignment.Center
     ) {
-        // Red offset
         Box(modifier = Modifier.graphicsLayer {
             translationX = aberrationOffset
             alpha = 0.5f
         }) {
             content()
         }
-        // Cyan offset
         Box(modifier = Modifier.graphicsLayer {
             translationX = -aberrationOffset
             alpha = 0.5f
         }) {
             content()
         }
-        // Normal content
         content()
     }
 }
@@ -227,5 +226,62 @@ private fun LiquidGlassEffect(content: @Composable () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         content()
+    }
+}
+
+@Composable
+private fun AuroraEffect(content: @Composable () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "aurora")
+    val shift by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(10000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shift"
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .drawBehind {
+                val brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFF001A33), Color(0xFF004D40), Color(0xFF1A237E)),
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width * shift, size.height)
+                )
+                drawRect(brush)
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
+}
+
+@Composable
+private fun ScanEffect(content: @Composable () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "scan")
+    val scanProgress by infiniteTransition.animateFloat(
+        initialValue = -0.5f,
+        targetValue = 1.5f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "scan"
+    )
+
+    Box(contentAlignment = Alignment.Center) {
+        content()
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val y = size.height * scanProgress
+            drawLine(
+                color = Color.Cyan.copy(alpha = 0.5f),
+                start = Offset(0f, y),
+                end = Offset(size.width, y),
+                strokeWidth = 2.dp.toPx()
+            )
+        }
     }
 }

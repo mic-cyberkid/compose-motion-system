@@ -3,12 +3,13 @@ package com.compose.motion.examples
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.compose.motion.modifiers.elevateOnPress
 import com.compose.motion.modifiers.motionClickable
@@ -17,56 +18,89 @@ import com.compose.motion.theme.MotionThemeDefaults
 import com.compose.motion.theme.ProvideMotionTheme
 
 /**
- * A complete, copy-paste ready example of using Compose Motion interaction modifiers.
+ * A highly interactive, copy-paste ready example demonstrating themed interactions.
  *
- * To use this:
- * 1. Ensure you have the Compose Motion library dependency in your build.gradle.
- * 2. Copy this file into your project.
- * 3. Call BasicInteractionsSample() from your setContent block.
+ * This sample shows how scaleOnPress and elevateOnPress transform a static Box
+ * into a responsive, premium-feeling component.
  */
 @Composable
 fun BasicInteractionsSample() {
-    // 1. Wrap your content in ProvideMotionTheme
     ProvideMotionTheme(theme = MotionThemeDefaults.Expressive) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+                .background(MaterialTheme.colorScheme.background)
+                .padding(32.dp),
+            verticalArrangement = Arrangement.spacedBy(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Compose Motion Interactions",
-                style = MaterialTheme.typography.headlineMedium
+                "Touch & Hold",
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold
             )
 
-            // 2. An interactive card using themed modifiers
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Premium Interactive Card
             Box(
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(240.dp)
+                    // 1. Motion Clickable handles the interaction state
+                    .motionClickable { /* click action */ }
+                    // 2. Scale down on press for tactile feel
+                    .scaleOnPress(targetScale = 0.92f)
+                    // 3. Increase elevation (shadow) on press for depth
+                    .elevateOnPress(pressedElevation = 24f, defaultElevation = 6f)
                     .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    // Apply motion modifiers!
-                    .motionClickable { /* Handle Click */ }
-                    .scaleOnPress(targetScale = 0.9f)
-                    .elevateOnPress(pressedElevation = 12f, defaultElevation = 4f),
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.tertiary
+                            )
+                        ),
+                        shape = RoundedCornerShape(24.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    "Press Me",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "PRESS ME",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = Color.White,
+                        fontWeight = FontWeight.Black
+                    )
+                    Text(
+                        "Scale + Elevation",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White.copy(alpha = 0.8f)
+                    )
+                }
             }
 
-            Text(
-                "The button above uses scaleOnPress and elevateOnPress " +
-                "which automatically resolve their animation specs from " +
-                "the Expressive MotionTheme.",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Explanation Section
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        "What's happening?",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        "• scaleOnPress: Uses a bouncy spring to shrink the element.\n" +
+                        "• elevateOnPress: Smoothly transition shadow depth.\n" +
+                        "• motionClickable: Connects these modifiers to the touch lifecycle.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 }

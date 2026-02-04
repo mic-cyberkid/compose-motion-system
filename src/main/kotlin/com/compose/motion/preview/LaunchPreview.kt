@@ -68,3 +68,20 @@ fun LiquidGlassLaunchPreview() {
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun AuroraLaunchPreview() {
+    ProvideMotionTheme {
+        MotionLaunch(
+            visible = true,
+            style = LaunchStyle.AuroraGradient
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(Color.White.copy(alpha = 0.5f), CircleShape)
+            )
+        }
+    }
+}
