@@ -39,4 +39,14 @@ sealed class LaunchStyle {
      * Starts as a frosted glass blob and smoothly morphs into the content.
      */
     object LiquidGlassMorph : LaunchStyle()
+
+    /**
+     * Futuristic aurora-like gradient background with breathing icon effect.
+     */
+    object AuroraGradient : LaunchStyle()
+
+    /**
+     * Futuristic scan-line effect for text and icons.
+     */
+    object KineticScan : LaunchStyle()
 }

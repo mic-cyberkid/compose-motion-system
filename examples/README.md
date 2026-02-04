@@ -13,7 +13,7 @@ Learn how to set up the `MotionTheme` and use interaction modifiers like `scaleO
 See how to implement professional screen transitions and hero-element transforms using `MotionNavHost`.
 
 ### 3. [Futuristic Launch Animation](./samples/LaunchAnimationSample.kt)
-Experience the `LiquidGlassMorph` and other futuristic launch presets in a complete loading sequence.
+Experience `LiquidGlassMorph`, `AuroraGradient`, and other futuristic launch presets in a complete loading sequence.
 
 ---
 
@@ -49,29 +49,26 @@ fun InteractiveButton(onClick: () -> Unit) {
             .scaleOnPress()      // Subtle shrink when pressed
             .elevateOnPress()    // Increase shadow when pressed
     ) {
-        Text("Press Me", color = Color.White, modifier = Modifier.align(Alignment.Center))
+        Text("Press Me", color = Color.White, modifier = Alignment.Center)
     }
 }
 ```
 
-### Scroll-Aware Animations
+### Futuristic Launch Presets
 
-Use `fadeOnScroll` to create dynamic headers or parallax effects.
+Compose Motion includes several 2026-ready launch animations:
+
+- `LaunchStyle.HolographicPulse`: Chromatic aberration and soft glow.
+- `LaunchStyle.OrbitalConverge`: Kinetic particles orbiting your logo.
+- `LaunchStyle.LiquidGlassMorph`: Frosted glass morphing into view.
+- `LaunchStyle.AuroraGradient`: Flowing aurora background.
 
 ```kotlin
-@Composable
-fun ScrollAwareHeader(scrollState: ScrollState) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .fadeOnScroll {
-                // Calculate progress based on scroll offset
-                (scrollState.value / 500f).coerceIn(0f, 1f)
-            }
-    ) {
-        Text("I fade as you scroll up")
-    }
+MotionLaunch(
+    visible = isLoading,
+    style = LaunchStyle.AuroraGradient
+) {
+    Logo()
 }
 ```
 
