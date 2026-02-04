@@ -39,7 +39,7 @@ fun MotionCard(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.scaleOnPress(),
+        modifier = modifier.scaleOnPress(interactionSource = interactionSource),
         enabled = enabled,
         shape = shape,
         colors = colors,
