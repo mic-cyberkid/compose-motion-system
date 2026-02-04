@@ -50,3 +50,21 @@ fun OrbitalLaunchPreview() {
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun LiquidGlassLaunchPreview() {
+    ProvideMotionTheme {
+        MotionLaunch(
+            visible = true,
+            style = LaunchStyle.LiquidGlassMorph,
+            backgroundColor = Color(0xFF1A1A1A)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .background(Color.White.copy(alpha = 0.8f), CircleShape)
+            )
+        }
+    }
+}

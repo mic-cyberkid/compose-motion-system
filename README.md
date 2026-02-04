@@ -16,7 +16,7 @@ To build a motion library that isn't just a collection of widgets, but a cohesiv
 - **Professional Micro-interactions**: Smooth scale, elevation, and clickable feedback.
 - **Component-level Animations**: Pre-configured entrance/exit transitions for common UI patterns.
 - **Navigation & Shared Elements**: Drop-in `NavHost` replacement with built-in support for Container Transforms and Shared Axis transitions.
-- **Pure-Compose Launch Animations**: Beautiful app-launch sequences (including futuristic presets) without relying on the system SplashScreen API.
+- **Pure-Compose Launch Animations**: Beautiful app-launch sequences (including futuristic presets like Holographic and Liquid Glass) without relying on the system SplashScreen API.
 - **Predictive Back Ready**: Fully compatible with modern Android back-gesture previews.
 
 ---
@@ -106,7 +106,7 @@ Create a seamless app entry sequence with futuristic styles:
 ```kotlin
 MotionLaunch(
     visible = isLoading,
-    style = LaunchStyle.HolographicPulse
+    style = LaunchStyle.LiquidGlassMorph // Futuristic liquid glass effect
 ) {
     AppLogo()
 }

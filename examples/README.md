@@ -102,7 +102,7 @@ fun ContentSwapExample(state: ScreenState) {
 
 ## 5. Pure-Compose Launch Screen
 
-Replace your splash screen with a `MotionLaunch` sequence, including futuristic presets.
+Replace your splash screen with a `MotionLaunch` sequence, including futuristic presets like Liquid Glass.
 
 ```kotlin
 @Composable
@@ -119,7 +119,7 @@ fun LaunchSequence() {
 
         MotionLaunch(
             visible = showLaunch,
-            style = LaunchStyle.HolographicPulse // Futuristic tech-forward style
+            style = LaunchStyle.LiquidGlassMorph // Futuristic liquid glass effect
         ) {
             // Your Splash Screen Content (e.g. Logo)
             Image(painterResource(R.drawable.logo), contentDescription = null)
