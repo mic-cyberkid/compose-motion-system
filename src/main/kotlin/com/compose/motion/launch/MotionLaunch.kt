@@ -67,7 +67,7 @@ fun MotionLaunch(
                                    scaleOut(targetScale = 1.1f, animationSpec = scheme.slowSpatialSpec())
             LaunchStyle.SlideUp -> slideOutVertically(animationSpec = scheme.slowSpatialSpec()) { -it } +
                                  fadeOut(animationSpec = scheme.slowEffectsSpec())
-            LaunchStyle.HolographicPulse, LaunchStyle.OrbitalConverge ->
+            LaunchStyle.HolographicPulse, LaunchStyle.OrbitalConverge, LaunchStyle.LiquidGlassMorph ->
                 fadeOut(animationSpec = scheme.slowEffectsSpec()) +
                 scaleOut(targetScale = 1.2f, animationSpec = scheme.slowSpatialSpec())
         },
@@ -85,6 +85,9 @@ fun MotionLaunch(
                 }
                 LaunchStyle.OrbitalConverge -> {
                     OrbitalEffect(content = content)
+                }
+                LaunchStyle.LiquidGlassMorph -> {
+                    LiquidGlassEffect(content = content)
                 }
                 else -> content()
             }
@@ -185,6 +188,44 @@ private fun OrbitalEffect(content: @Composable () -> Unit) {
                 )
             }
         }
+        content()
+    }
+}
+
+@Composable
+private fun LiquidGlassEffect(content: @Composable () -> Unit) {
+    var startAnimation by remember { mutableStateOf(false) }
+    val scheme = MaterialTheme.motionScheme
+
+    LaunchedEffect(Unit) {
+        startAnimation = true
+    }
+
+    val blurAmount by animateFloatAsState(
+        targetValue = if (startAnimation) 0f else 40f,
+        animationSpec = scheme.slowSpatialSpec(),
+        label = "blur"
+    )
+
+    val scaleAmount by animateFloatAsState(
+        targetValue = if (startAnimation) 1f else 0.4f,
+        animationSpec = scheme.slowSpatialSpec(),
+        label = "scale"
+    )
+
+    val alphaAmount by animateFloatAsState(
+        targetValue = if (startAnimation) 1f else 0f,
+        animationSpec = scheme.slowEffectsSpec(),
+        label = "alpha"
+    )
+
+    Box(
+        modifier = Modifier
+            .scale(scaleAmount)
+            .alpha(alphaAmount)
+            .blur(blurAmount.dp),
+        contentAlignment = Alignment.Center
+    ) {
         content()
     }
 }

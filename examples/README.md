@@ -1,10 +1,27 @@
 # Compose Motion Examples
 
-This directory provides detailed examples of how to use **Compose Motion** in your Jetpack Compose applications.
+This directory contains full, copy-paste ready sample code for **Compose Motion**.
 
-## 1. Setting Up the Theme
+## 🚀 Quick Start Samples
 
-The first step is to wrap your app in `ProvideMotionTheme`. You can choose between `Standard` (subtle) or `Expressive` (bouncy) personalities.
+For users with zero knowledge of the library, we have prepared standalone samples that you can copy and paste directly into your IDE.
+
+### 1. [Basic Interactions](./samples/BasicInteractions.kt)
+Learn how to set up the `MotionTheme` and use interaction modifiers like `scaleOnPress` and `elevateOnPress`.
+
+### 2. [Navigation & Shared Elements](./samples/NavigationSample.kt)
+See how to implement professional screen transitions and hero-element transforms using `MotionNavHost`.
+
+### 3. [Futuristic Launch Animation](./samples/LaunchAnimationSample.kt)
+Experience the `LiquidGlassMorph` and other futuristic launch presets in a complete loading sequence.
+
+---
+
+## 📖 Guided Examples
+
+### Setting Up the Theme
+
+Wrap your app in `ProvideMotionTheme`. You can choose between `Standard` (subtle) or `Expressive` (bouncy).
 
 ```kotlin
 @Composable
@@ -17,9 +34,7 @@ fun MyApp() {
 }
 ```
 
----
-
-## 2. Using Interaction Modifiers
+### Using Interaction Modifiers
 
 Add micro-interactions to any composable using intent-based modifiers.
 
@@ -39,98 +54,7 @@ fun InteractiveButton(onClick: () -> Unit) {
 }
 ```
 
----
-
-## 3. Advanced Navigation with Shared Elements
-
-`MotionNavHost` simplifies shared element transitions and container transforms.
-
-```kotlin
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-
-    MotionNavHost(
-        navController = navController,
-        startDestination = "list",
-        transition = MotionTransition.ContainerTransform
-    ) {
-        motionComposable("list") {
-            ListScreen(onItemClick = { id -> navController.navigate("detail/$id") })
-        }
-
-        motionComposable("detail/{itemId}") { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId")
-            DetailScreen(
-                itemId = itemId ?: "",
-                modifier = Modifier.sharedElement(key = "item-$itemId")
-            )
-        }
-    }
-}
-```
-
----
-
-## 4. Animated Visibility and Content
-
-Use `MotionVisibility` and `MotionContent` for theme-aligned transitions.
-
-```kotlin
-@Composable
-fun VisibilityExample(visible: Boolean) {
-    MotionVisibility(visible = visible) {
-        Card {
-            Text("I appear with a themed fade + scale animation!")
-        }
-    }
-}
-
-@Composable
-fun ContentSwapExample(state: ScreenState) {
-    MotionContent(targetState = state) { target ->
-        when (target) {
-            ScreenState.Loading -> LoadingView()
-            ScreenState.Success -> DataView()
-            ScreenState.Error -> ErrorView()
-        }
-    }
-}
-```
-
----
-
-## 5. Pure-Compose Launch Screen
-
-Replace your splash screen with a `MotionLaunch` sequence, including futuristic presets.
-
-```kotlin
-@Composable
-fun LaunchSequence() {
-    var showLaunch by remember { mutableStateOf(true) }
-
-    LaunchedEffect(Unit) {
-        delay(2000)
-        showLaunch = false
-    }
-
-    Box {
-        MainAppContent()
-
-        MotionLaunch(
-            visible = showLaunch,
-            style = LaunchStyle.HolographicPulse // Futuristic tech-forward style
-        ) {
-            // Your Splash Screen Content (e.g. Logo)
-            Image(painterResource(R.drawable.logo), contentDescription = null)
-        }
-    }
-}
-```
-
----
-
-## 6. Scroll-Aware Animations
+### Scroll-Aware Animations
 
 Use `fadeOnScroll` to create dynamic headers or parallax effects.
 
@@ -149,4 +73,15 @@ fun ScrollAwareHeader(scrollState: ScrollState) {
         Text("I fade as you scroll up")
     }
 }
+```
+
+---
+
+## 🛠️ Project Setup for Samples
+
+To run these samples, ensure you have the following dependencies in your `libs.versions.toml` or `build.gradle.kts`:
+
+```toml
+[libraries]
+compose-motion = { group = "com.compose.motion", name = "compose-motion", version = "0.1.0" }
 ```

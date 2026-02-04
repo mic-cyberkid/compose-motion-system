@@ -33,4 +33,10 @@ sealed class LaunchStyle {
      * Dynamic and kinetic, ideal for AI or data-heavy apps.
      */
     object OrbitalConverge : LaunchStyle()
+
+    /**
+     * Futuristic liquid glass morph effect.
+     * Starts as a frosted glass blob and smoothly morphs into the content.
+     */
+    object LiquidGlassMorph : LaunchStyle()
 }
