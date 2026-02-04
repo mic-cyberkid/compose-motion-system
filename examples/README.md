@@ -13,7 +13,7 @@ Learn how to set up the `MotionTheme` and use interaction modifiers like `scaleO
 See how to implement professional screen transitions and hero-element transforms using `MotionNavHost`.
 
 ### 3. [Futuristic Launch Animation](./samples/LaunchAnimationSample.kt)
-Experience `LiquidGlassMorph`, `AuroraGradient`, and other futuristic launch presets in a complete loading sequence.
+Experience `LiquidGlassMorph`, `AuroraGradient`, `BentoReveal`, and other futuristic launch presets in a complete loading sequence.
 
 ---
 
@@ -62,11 +62,13 @@ Compose Motion includes several 2026-ready launch animations:
 - `LaunchStyle.OrbitalConverge`: Kinetic particles orbiting your logo.
 - `LaunchStyle.LiquidGlassMorph`: Frosted glass morphing into view.
 - `LaunchStyle.AuroraGradient`: Flowing aurora background.
+- `LaunchStyle.BentoReveal`: Staggered grid cell reveal.
+- `LaunchStyle.MatrixRain`: Cyberpunk digital rain trails.
 
 ```kotlin
 MotionLaunch(
     visible = isLoading,
-    style = LaunchStyle.AuroraGradient
+    style = LaunchStyle.BentoReveal
 ) {
     Logo()
 }

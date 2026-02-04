@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -73,6 +74,8 @@ fun MotionLaunch(
                 LaunchStyle.AuroraGradient -> AuroraEffect(content = content)
                 LaunchStyle.KineticScan -> ScanEffect(content = content)
                 LaunchStyle.GlowPulse -> GlowPulseEffect(content = content)
+                LaunchStyle.MatrixRain -> MatrixEffect(content = content)
+                LaunchStyle.BentoReveal -> BentoEffect(content = content)
                 else -> content()
             }
         }
@@ -122,9 +125,10 @@ private fun OrbitalEffect(content: @Composable () -> Unit) {
 private fun LiquidGlassEffect(content: @Composable () -> Unit) {
     var start by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { start = true }
-    val blur by animateFloatAsState(if (start) 0f else 40f, tween(1000), label = "blur")
+    val blur by animateFloatAsState(if (start) 0f else 40f, tween(1200), label = "blur")
     val scale by animateFloatAsState(if (start) 1f else 0.5f, spring(stiffness = Spring.StiffnessLow), label = "scale")
-    Box(modifier = Modifier.scale(scale).blur(blur.dp)) { content() }
+    val alpha by animateFloatAsState(if (start) 1f else 0f, tween(800), label = "alpha")
+    Box(modifier = Modifier.scale(scale).alpha(alpha).blur(blur.dp)) { content() }
 }
 
 @Composable
@@ -162,4 +166,61 @@ private fun GlowPulseEffect(content: @Composable () -> Unit) {
         animationSpec = infiniteRepeatable(tween(1500), RepeatMode.Reverse), label = "glow"
     )
     Box(modifier = Modifier.graphicsLayer { shadowElevation = 30f * glow; spotShadowColor = Color.White }) { content() }
+}
+
+@Composable
+private fun MatrixEffect(content: @Composable () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "matrix")
+    val progress by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(4000, easing = LinearEasing)), label = "matrix"
+    )
+    Box(modifier = Modifier.fillMaxSize().drawBehind {
+        val columns = 20
+        val columnWidth = size.width / columns
+        for (i in 0 until columns) {
+            val x = i * columnWidth
+            val yOffset = ((progress + (i * 0.13f)) % 1f) * size.height
+            drawRect(
+                Brush.verticalGradient(listOf(Color.Transparent, Color.Green.copy(0.2f), Color.Transparent)),
+                topLeft = Offset(x, yOffset - 200.dp.toPx()),
+                size = Size(columnWidth / 2, 200.dp.toPx())
+            )
+        }
+    }, contentAlignment = Alignment.Center) { content() }
+}
+
+@Composable
+private fun BentoEffect(content: @Composable () -> Unit) {
+    var start by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { start = true }
+
+    val gridProgress by animateFloatAsState(
+        targetValue = if (start) 1f else 0f,
+        animationSpec = tween(1200, easing = FastOutSlowInEasing),
+        label = "bento"
+    )
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        content()
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val grid = 4
+            val cellW = size.width / grid
+            val cellH = size.height / grid
+            for (i in 0 until grid) {
+                for (j in 0 until grid) {
+                    val delay = (i + j) * 0.1f
+                    val cellProgress = (gridProgress - delay).coerceIn(0f, 1f)
+                    if (cellProgress < 1f) {
+                        drawRect(
+                            color = Color.Black,
+                            topLeft = Offset(i * cellW, j * cellH),
+                            size = Size(cellW, cellH),
+                            alpha = 1f - cellProgress
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

@@ -85,3 +85,38 @@ fun AuroraLaunchPreview() {
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun MatrixLaunchPreview() {
+    ProvideMotionTheme {
+        MotionLaunch(
+            visible = true,
+            style = LaunchStyle.MatrixRain,
+            backgroundColor = Color.Black
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .background(Color.Green.copy(0.5f), CircleShape)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BentoLaunchPreview() {
+    ProvideMotionTheme {
+        MotionLaunch(
+            visible = true,
+            style = LaunchStyle.BentoReveal
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(150.dp)
+                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+            )
+        }
+    }
+}

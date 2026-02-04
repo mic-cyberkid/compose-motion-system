@@ -39,18 +39,26 @@ fun LaunchAnimationSample() {
                 Text("Select a Style to Preview:", style = MaterialTheme.typography.titleLarge)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(onClick = { currentStyle = LaunchStyle.LiquidGlassMorph }) { Text("Liquid Glass") }
-                Button(onClick = { currentStyle = LaunchStyle.HolographicPulse }) { Text("Holographic Pulse") }
-                Button(onClick = { currentStyle = LaunchStyle.OrbitalConverge }) { Text("Orbital Converge") }
-                Button(onClick = { currentStyle = LaunchStyle.AuroraGradient }) { Text("Aurora Gradient") }
-                Button(onClick = { currentStyle = LaunchStyle.GlowPulse }) { Text("Glow Pulse") }
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(onClick = { currentStyle = LaunchStyle.LiquidGlassMorph }, modifier = Modifier.padding(4.dp)) { Text("Liquid Glass") }
+                    Button(onClick = { currentStyle = LaunchStyle.HolographicPulse }, modifier = Modifier.padding(4.dp)) { Text("Holographic") }
+                    Button(onClick = { currentStyle = LaunchStyle.OrbitalConverge }, modifier = Modifier.padding(4.dp)) { Text("Orbital") }
+                    Button(onClick = { currentStyle = LaunchStyle.AuroraGradient }, modifier = Modifier.padding(4.dp)) { Text("Aurora") }
+                    Button(onClick = { currentStyle = LaunchStyle.BentoReveal }, modifier = Modifier.padding(4.dp)) { Text("Bento") }
+                    Button(onClick = { currentStyle = LaunchStyle.MatrixRain }, modifier = Modifier.padding(4.dp)) { Text("Matrix") }
+                    Button(onClick = { currentStyle = LaunchStyle.GlowPulse }, modifier = Modifier.padding(4.dp)) { Text("Glow Pulse") }
+                }
             }
 
             // The Launch Overlay
             MotionLaunch(
                 visible = showLaunch,
                 style = currentStyle,
-                backgroundColor = if (currentStyle == LaunchStyle.AuroraGradient) Color.Transparent else Color(0xFF121212)
+                backgroundColor = if (currentStyle == LaunchStyle.AuroraGradient || currentStyle == LaunchStyle.MatrixRain) Color.Transparent else Color(0xFF121212)
             ) {
                 Box(
                     modifier = Modifier

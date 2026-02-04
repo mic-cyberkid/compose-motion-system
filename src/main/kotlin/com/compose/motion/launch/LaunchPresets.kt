@@ -54,4 +54,14 @@ sealed class LaunchStyle {
      * Futuristic glowing reveal that expands from the center.
      */
     data object GlowPulse : LaunchStyle()
+
+    /**
+     * Cyber-modern Matrix-inspired digital rain effect.
+     */
+    data object MatrixRain : LaunchStyle()
+
+    /**
+     * High-end bento-grid layout reveal.
+     */
+    data object BentoReveal : LaunchStyle()
 }
