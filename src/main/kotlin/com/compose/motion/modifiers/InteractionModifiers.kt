@@ -21,13 +21,16 @@ import com.compose.motion.theme.motionScheme
  * Uses themed motion tokens from [MaterialTheme.motionScheme] to ensure
  * consistency with the application's motion style.
  *
+ * @param interactionSource Optional [MutableInteractionSource] to track interactions.
+ *                          If provided, this modifier will observe the press state from it.
  * @param targetScale The scale to apply when pressed. Defaults to 0.95f.
  */
 fun Modifier.scaleOnPress(
+    interactionSource: MutableInteractionSource? = null,
     targetScale: Float = 0.95f
 ): Modifier = composed {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
+    val actualInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
+    val isPressed by actualInteractionSource.collectIsPressedAsState()
     val scheme = MaterialTheme.motionScheme
 
     val scale by animateFloatAsState(
@@ -37,11 +40,6 @@ fun Modifier.scaleOnPress(
     )
 
     this.scale(scale)
-        .clickable(
-            interactionSource = interactionSource,
-            indication = null, // Interaction is handled by the scale effect
-            onClick = {}
-        )
 }
 
 /**
@@ -51,7 +49,7 @@ fun Modifier.scaleOnPress(
  * other motion modifiers (like [scaleOnPress]) to provide the feedback.
  *
  * @param interactionSource Optional [MutableInteractionSource] to track interactions.
- * @param useDefaultIndication Whether to use the default [LocalIndication] (ripple). Defaults to false.
+ * @param useDefaultIndication Whether to use the default ripple effect. Defaults to false.
  * @param onClick Callback to be invoked when the element is clicked.
  */
 fun Modifier.motionClickable(
@@ -71,15 +69,17 @@ fun Modifier.motionClickable(
 /**
  * A modifier that applies an elevation effect when the element is pressed.
  *
+ * @param interactionSource Optional [MutableInteractionSource] to track interactions.
  * @param pressedElevation The elevation to apply when pressed. Defaults to 8.dp.
  * @param defaultElevation The elevation to apply when not pressed. Defaults to 2.dp.
  */
 fun Modifier.elevateOnPress(
+    interactionSource: MutableInteractionSource? = null,
     pressedElevation: Float = 8f,
     defaultElevation: Float = 2f
 ): Modifier = composed {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
+    val actualInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
+    val isPressed by actualInteractionSource.collectIsPressedAsState()
     val scheme = MaterialTheme.motionScheme
 
     val elevation by animateFloatAsState(

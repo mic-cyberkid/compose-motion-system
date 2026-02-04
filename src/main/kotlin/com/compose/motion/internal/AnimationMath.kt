@@ -2,7 +2,7 @@ package com.compose.motion.internal
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.ui.util.lerp
+import androidx.compose.ui.util.lerp as composeLerp
 
 /**
  * Reusable math utilities for motion calculations.
@@ -20,7 +20,7 @@ internal object AnimationMath {
      * @return The interpolated value.
      */
     fun lerp(start: Float, stop: Float, fraction: Float): Float {
-        return lerp(start, stop, fraction)
+        return composeLerp(start, stop, fraction)
     }
 
     /**
