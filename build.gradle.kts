@@ -40,11 +40,13 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
 
-    // Use 'api' for dependencies exposed in public API signatures
+    // Core APIs exposed to consumers to avoid 'Cannot access class' or 'inaccessible' errors
+    api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.ui)
     api(libs.androidx.compose.ui.graphics)
     api(libs.androidx.compose.material3)
     api(libs.androidx.compose.navigation)
+    api(libs.androidx.compose.animation)
 
     implementation(libs.androidx.compose.ui.tooling.preview)
 }

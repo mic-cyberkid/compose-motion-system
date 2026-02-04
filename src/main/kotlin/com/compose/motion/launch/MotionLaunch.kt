@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -33,16 +34,6 @@ import kotlin.math.sin
  *
  * This provides a flexible way to implement custom splash or launch screens
  * entirely in Compose, without relying on the system SplashScreen API.
- *
- * It is entirely driven by the [visible] parameter, allowing the application
- * to control when the launch animation starts and ends (e.g., after data is loaded).
- *
- * @param visible Whether the launch screen should be visible.
- * @param style The style of the exit animation when [visible] becomes false.
- *              Defaults to [LaunchStyle.FadeScale].
- * @param modifier Modifier for the container.
- * @param backgroundColor Background color of the launch screen. Defaults to theme background.
- * @param content The content to display on the launch screen (e.g., app logo).
  */
 @Composable
 fun MotionLaunch(
@@ -77,21 +68,14 @@ fun MotionLaunch(
             contentAlignment = Alignment.Center
         ) {
             when (style) {
-                LaunchStyle.HolographicPulse -> {
-                    HolographicEffect(content = content)
-                }
-                LaunchStyle.OrbitalConverge -> {
-                    OrbitalEffect(content = content)
-                }
-                LaunchStyle.LiquidGlassMorph -> {
-                    LiquidGlassEffect(content = content)
-                }
-                LaunchStyle.AuroraGradient -> {
-                    AuroraEffect(content = content)
-                }
-                LaunchStyle.KineticScan -> {
-                    ScanEffect(content = content)
-                }
+                LaunchStyle.HolographicPulse -> HolographicEffect(content = content)
+                LaunchStyle.OrbitalConverge -> OrbitalEffect(content = content)
+                LaunchStyle.LiquidGlassMorph -> LiquidGlassEffect(content = content)
+                LaunchStyle.AuroraGradient -> AuroraEffect(content = content)
+                LaunchStyle.KineticScan -> ScanEffect(content = content)
+                LaunchStyle.GlowPulse -> GlowPulseEffect(content = content)
+                LaunchStyle.MatrixRain -> MatrixEffect(content = content)
+                LaunchStyle.BentoReveal -> BentoEffect(content = content)
                 else -> content()
             }
         }
@@ -101,48 +85,18 @@ fun MotionLaunch(
 @Composable
 private fun HolographicEffect(content: @Composable () -> Unit) {
     val infiniteTransition = rememberInfiniteTransition(label = "holographic")
-
     val pulseScale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.05f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulseScale"
+        initialValue = 1f, targetValue = 1.05f,
+        animationSpec = infiniteRepeatable(tween(2000), RepeatMode.Reverse), label = "pulse"
+    )
+    val aberration by infiniteTransition.animateFloat(
+        initialValue = -2f, targetValue = 2f,
+        animationSpec = infiniteRepeatable(tween(3000), RepeatMode.Reverse), label = "aberration"
     )
 
-    val aberrationOffset by infiniteTransition.animateFloat(
-        initialValue = -2f,
-        targetValue = 2f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "aberration"
-    )
-
-    Box(
-        modifier = Modifier
-            .scale(pulseScale)
-            .graphicsLayer {
-                shadowElevation = 20f
-                spotShadowColor = Color.Cyan.copy(alpha = 0.5f)
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Box(modifier = Modifier.graphicsLayer {
-            translationX = aberrationOffset
-            alpha = 0.5f
-        }) {
-            content()
-        }
-        Box(modifier = Modifier.graphicsLayer {
-            translationX = -aberrationOffset
-            alpha = 0.5f
-        }) {
-            content()
-        }
+    Box(modifier = Modifier.scale(pulseScale), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.graphicsLayer { translationX = aberration; alpha = 0.5f }) { content() }
+        Box(modifier = Modifier.graphicsLayer { translationX = -aberration; alpha = 0.5f }) { content() }
         content()
     }
 }
@@ -151,40 +105,16 @@ private fun HolographicEffect(content: @Composable () -> Unit) {
 private fun OrbitalEffect(content: @Composable () -> Unit) {
     val infiniteTransition = rememberInfiniteTransition(label = "orbital")
     val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(10000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "rotation"
+        initialValue = 0f, targetValue = 360f,
+        animationSpec = infiniteRepeatable(tween(10000, easing = LinearEasing)), label = "rot"
     )
-
-    val pulse by infiniteTransition.animateFloat(
-        initialValue = 0.8f,
-        targetValue = 1.2f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulse"
-    )
-
     Box(contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val center = Offset(size.width / 2, size.height / 2)
-            val radius = 100.dp.toPx() * pulse
-
-            for (i in 0 until 12) {
-                val angle = Math.toRadians((rotation + (i * 30)).toDouble())
-                val x = center.x + radius * cos(angle).toFloat()
-                val y = center.y + radius * sin(angle).toFloat()
-
-                drawCircle(
-                    color = Color.Cyan.copy(alpha = 0.3f),
-                    radius = 4.dp.toPx(),
-                    center = Offset(x, y)
-                )
+            val radius = 100.dp.toPx()
+            for (i in 0 until 8) {
+                val angle = Math.toRadians((rotation + (i * 45)).toDouble())
+                drawCircle(Color.Cyan.copy(alpha = 0.4f), 4.dp.toPx(),
+                    Offset(size.width/2 + radius * cos(angle).toFloat(), size.height/2 + radius * sin(angle).toFloat()))
             }
         }
         content()
@@ -193,95 +123,104 @@ private fun OrbitalEffect(content: @Composable () -> Unit) {
 
 @Composable
 private fun LiquidGlassEffect(content: @Composable () -> Unit) {
-    var startAnimation by remember { mutableStateOf(false) }
-    val scheme = MaterialTheme.motionScheme
-
-    LaunchedEffect(Unit) {
-        startAnimation = true
-    }
-
-    val blurAmount by animateFloatAsState(
-        targetValue = if (startAnimation) 0f else 40f,
-        animationSpec = scheme.slowSpatialSpec(),
-        label = "blur"
-    )
-
-    val scaleAmount by animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0.4f,
-        animationSpec = scheme.slowSpatialSpec(),
-        label = "scale"
-    )
-
-    val alphaAmount by animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = scheme.slowEffectsSpec(),
-        label = "alpha"
-    )
-
-    Box(
-        modifier = Modifier
-            .scale(scaleAmount)
-            .alpha(alphaAmount)
-            .blur(blurAmount.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        content()
-    }
+    var start by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { start = true }
+    val blur by animateFloatAsState(if (start) 0f else 40f, tween(1200), label = "blur")
+    val scale by animateFloatAsState(if (start) 1f else 0.5f, spring(stiffness = Spring.StiffnessLow), label = "scale")
+    val alpha by animateFloatAsState(if (start) 1f else 0f, tween(800), label = "alpha")
+    Box(modifier = Modifier.scale(scale).alpha(alpha).blur(blur.dp)) { content() }
 }
 
 @Composable
 private fun AuroraEffect(content: @Composable () -> Unit) {
     val infiniteTransition = rememberInfiniteTransition(label = "aurora")
     val shift by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(10000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "shift"
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(8000), RepeatMode.Reverse), label = "shift"
     )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .drawBehind {
-                val brush = Brush.linearGradient(
-                    colors = listOf(Color(0xFF001A33), Color(0xFF004D40), Color(0xFF1A237E)),
-                    start = Offset(0f, 0f),
-                    end = Offset(size.width * shift, size.height)
-                )
-                drawRect(brush)
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        content()
-    }
+    Box(modifier = Modifier.fillMaxSize().drawBehind {
+        drawRect(Brush.linearGradient(listOf(Color(0xFF001A33), Color(0xFF004D40)), end = Offset(size.width * shift, size.height)))
+    }, contentAlignment = Alignment.Center) { content() }
 }
 
 @Composable
 private fun ScanEffect(content: @Composable () -> Unit) {
     val infiniteTransition = rememberInfiniteTransition(label = "scan")
-    val scanProgress by infiniteTransition.animateFloat(
-        initialValue = -0.5f,
-        targetValue = 1.5f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "scan"
+    val y by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(2000)), label = "y"
     )
-
-    Box(contentAlignment = Alignment.Center) {
+    Box {
         content()
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val y = size.height * scanProgress
-            drawLine(
-                color = Color.Cyan.copy(alpha = 0.5f),
-                start = Offset(0f, y),
-                end = Offset(size.width, y),
-                strokeWidth = 2.dp.toPx()
+            drawLine(Color.Cyan.copy(0.3f), Offset(0f, size.height * y), Offset(size.width, size.height * y), 2.dp.toPx())
+        }
+    }
+}
+
+@Composable
+private fun GlowPulseEffect(content: @Composable () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "glow")
+    val glow by infiniteTransition.animateFloat(
+        initialValue = 0.4f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(1500), RepeatMode.Reverse), label = "glow"
+    )
+    Box(modifier = Modifier.graphicsLayer { shadowElevation = 30f * glow; spotShadowColor = Color.White }) { content() }
+}
+
+@Composable
+private fun MatrixEffect(content: @Composable () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "matrix")
+    val progress by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(4000, easing = LinearEasing)), label = "matrix"
+    )
+    Box(modifier = Modifier.fillMaxSize().drawBehind {
+        val columns = 20
+        val columnWidth = size.width / columns
+        for (i in 0 until columns) {
+            val x = i * columnWidth
+            val yOffset = ((progress + (i * 0.13f)) % 1f) * size.height
+            drawRect(
+                Brush.verticalGradient(listOf(Color.Transparent, Color.Green.copy(0.2f), Color.Transparent)),
+                topLeft = Offset(x, yOffset - 200.dp.toPx()),
+                size = Size(columnWidth / 2, 200.dp.toPx())
             )
+        }
+    }, contentAlignment = Alignment.Center) { content() }
+}
+
+@Composable
+private fun BentoEffect(content: @Composable () -> Unit) {
+    var start by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { start = true }
+
+    val gridProgress by animateFloatAsState(
+        targetValue = if (start) 1f else 0f,
+        animationSpec = tween(1200, easing = FastOutSlowInEasing),
+        label = "bento"
+    )
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        content()
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val grid = 4
+            val cellW = size.width / grid
+            val cellH = size.height / grid
+            for (i in 0 until grid) {
+                for (j in 0 until grid) {
+                    val delay = (i + j) * 0.1f
+                    val cellProgress = (gridProgress - delay).coerceIn(0f, 1f)
+                    if (cellProgress < 1f) {
+                        drawRect(
+                            color = Color.Black,
+                            topLeft = Offset(i * cellW, j * cellH),
+                            size = Size(cellW, cellH),
+                            alpha = 1f - cellProgress
+                        )
+                    }
+                }
+            }
         }
     }
 }

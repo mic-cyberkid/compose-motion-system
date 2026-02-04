@@ -16,7 +16,7 @@ To build a motion library that isn't just a collection of widgets, but a cohesiv
 - **Professional Micro-interactions**: Smooth scale, elevation, and clickable feedback.
 - **Component-level Animations**: Pre-configured entrance/exit transitions for common UI patterns.
 - **Navigation & Shared Elements**: Drop-in `NavHost` replacement with built-in support for Container Transforms and Shared Axis transitions.
-- **Pure-Compose Launch Animations**: Beautiful app-launch sequences (including futuristic presets like Holographic, Liquid Glass, Aurora, and Kinetic Scan) without relying on the system SplashScreen API.
+- **Pure-Compose Launch Animations**: Beautiful app-launch sequences (including futuristic presets like Holographic, Liquid Glass, Aurora, Bento, and Matrix) without relying on the system SplashScreen API.
 - **Predictive Back Ready**: Fully compatible with modern Android back-gesture previews.
 
 ---
@@ -29,7 +29,11 @@ Add the following to your `build.gradle.kts`:
 
 ```kotlin
 dependencies {
+    // Core library
     implementation("com.compose.motion:compose-motion:0.1.0")
+
+    // Note: If you encounter 'Cannot access class' errors, ensure you have
+    // the Compose Runtime and UI libraries in your project.
 }
 ```
 
@@ -106,7 +110,7 @@ Create a seamless app entry sequence with futuristic styles:
 ```kotlin
 MotionLaunch(
     visible = isLoading,
-    style = LaunchStyle.LiquidGlassMorph // Futuristic liquid glass effect
+    style = LaunchStyle.BentoReveal // High-end bento grid reveal
 ) {
     AppLogo()
 }
