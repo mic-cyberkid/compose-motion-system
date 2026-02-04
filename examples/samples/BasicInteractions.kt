@@ -1,6 +1,7 @@
 package com.compose.motion.examples
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -25,6 +26,9 @@ import com.compose.motion.theme.ProvideMotionTheme
  */
 @Composable
 fun BasicInteractionsSample() {
+    // 1. Create a shared interaction source to coordinate animations
+    val interactionSource = remember { MutableInteractionSource() }
+
     ProvideMotionTheme(theme = MotionThemeDefaults.Expressive) {
         Column(
             modifier = Modifier
@@ -43,38 +47,44 @@ fun BasicInteractionsSample() {
             Spacer(modifier = Modifier.height(16.dp))
 
             // Premium Interactive Card
-            Box(
+            // We use Surface here to handle elevation and clipping correctly
+            Surface(
                 modifier = Modifier
                     .size(240.dp)
-                    // 1. Motion Clickable handles the interaction state
-                    .motionClickable { /* click action */ }
-                    // 2. Scale down on press for tactile feel
-                    .scaleOnPress(targetScale = 0.92f)
-                    // 3. Increase elevation (shadow) on press for depth
-                    .elevateOnPress(pressedElevation = 24f, defaultElevation = 6f)
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.tertiary
+                    // 2. Pass the shared interaction source to all motion modifiers
+                    .motionClickable(interactionSource = interactionSource) { /* action */ }
+                    .scaleOnPress(interactionSource = interactionSource, targetScale = 0.92f)
+                    .elevateOnPress(interactionSource = interactionSource, pressedElevation = 24f, defaultElevation = 6f),
+                shape = RoundedCornerShape(24.dp),
+                // Using a brush for a modern look
+                color = Color.Transparent
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.tertiary
+                                )
                             )
                         ),
-                        shape = RoundedCornerShape(24.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        "PRESS ME",
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = Color.White,
-                        fontWeight = FontWeight.Black
-                    )
-                    Text(
-                        "Scale + Elevation",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.8f)
-                    )
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            "PRESS ME",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = Color.White,
+                            fontWeight = FontWeight.Black
+                        )
+                        Text(
+                            "Scale + Elevation",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.White.copy(alpha = 0.8f)
+                        )
+                    }
                 }
             }
 
@@ -94,9 +104,9 @@ fun BasicInteractionsSample() {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        "• scaleOnPress: Uses a bouncy spring to shrink the element.\n" +
-                        "• elevateOnPress: Smoothly transition shadow depth.\n" +
-                        "• motionClickable: Connects these modifiers to the touch lifecycle.",
+                        "• Shared Interaction: All modifiers now share a single InteractionSource.\n" +
+                        "• Surface usage: Handles shadows and clipping cleanly without sharp edges.\n" +
+                        "• Bouncy Motion: resolve automatically from the Expressive theme.",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

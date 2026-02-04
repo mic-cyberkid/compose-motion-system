@@ -10,6 +10,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,9 +32,6 @@ import kotlin.math.sin
 
 /**
  * A pure-Compose launch animation container.
- *
- * This provides a flexible way to implement custom splash or launch screens
- * entirely in Compose, without relying on the system SplashScreen API.
  */
 @Composable
 fun MotionLaunch(
@@ -76,6 +74,8 @@ fun MotionLaunch(
                 LaunchStyle.GlowPulse -> GlowPulseEffect(content = content)
                 LaunchStyle.MatrixRain -> MatrixEffect(content = content)
                 LaunchStyle.BentoReveal -> BentoEffect(content = content)
+                LaunchStyle.GlassReveal -> GlassRevealEffect(content = content)
+                LaunchStyle.OrganicMorph -> OrganicEffect(content = content)
                 else -> content()
             }
         }
@@ -194,13 +194,9 @@ private fun MatrixEffect(content: @Composable () -> Unit) {
 private fun BentoEffect(content: @Composable () -> Unit) {
     var start by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { start = true }
-
     val gridProgress by animateFloatAsState(
-        targetValue = if (start) 1f else 0f,
-        animationSpec = tween(1200, easing = FastOutSlowInEasing),
-        label = "bento"
+        if (start) 1f else 0f, tween(1200, easing = FastOutSlowInEasing), label = "bento"
     )
-
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         content()
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -212,15 +208,42 @@ private fun BentoEffect(content: @Composable () -> Unit) {
                     val delay = (i + j) * 0.1f
                     val cellProgress = (gridProgress - delay).coerceIn(0f, 1f)
                     if (cellProgress < 1f) {
-                        drawRect(
-                            color = Color.Black,
-                            topLeft = Offset(i * cellW, j * cellH),
-                            size = Size(cellW, cellH),
-                            alpha = 1f - cellProgress
-                        )
+                        drawRect(Color.Black, Offset(i * cellW, j * cellH), Size(cellW, cellH), 1f - cellProgress)
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun GlassRevealEffect(content: @Composable () -> Unit) {
+    var start by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { start = true }
+    val alpha by animateFloatAsState(if (start) 1f else 0f, tween(1500), label = "alpha")
+    val scale by animateFloatAsState(if (start) 1f else 1.2f, spring(stiffness = Spring.StiffnessVeryLow), label = "scale")
+
+    Box(modifier = Modifier.scale(scale).alpha(alpha), contentAlignment = Alignment.Center) {
+        content()
+    }
+}
+
+@Composable
+private fun OrganicEffect(content: @Composable () -> Unit) {
+    val infiniteTransition = rememberInfiniteTransition(label = "organic")
+    val morph by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(3000), RepeatMode.Reverse), label = "morph"
+    )
+    Box(contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier.size(200.dp)) {
+            val radius = size.minDimension / 2
+            drawCircle(
+                color = Color.Magenta.copy(alpha = 0.2f),
+                radius = radius * (0.8f + 0.2f * morph),
+                center = center
+            )
+        }
+        content()
     }
 }

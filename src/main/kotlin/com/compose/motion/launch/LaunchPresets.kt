@@ -64,4 +64,14 @@ sealed class LaunchStyle {
      * High-end bento-grid layout reveal.
      */
     data object BentoReveal : LaunchStyle()
+
+    /**
+     * Advanced glass reveal with refraction and soft particles.
+     */
+    data object GlassReveal : LaunchStyle()
+
+    /**
+     * Organic morphing shape that dissolves into the content.
+     */
+    data object OrganicMorph : LaunchStyle()
 }
