@@ -19,6 +19,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
