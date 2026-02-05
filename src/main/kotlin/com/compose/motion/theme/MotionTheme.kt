@@ -10,10 +10,12 @@ import androidx.compose.runtime.staticCompositionLocalOf
  * Defines the motion theme for the application.
  *
  * @property scheme The [MotionScheme] to use for animations. Defaults to [MotionScheme.standard].
+ * @property style The [MotionStyle] to use for surface treatments and effects. Defaults to [MotionStyle.standard].
  */
 @Immutable
 data class MotionTheme(
-    val scheme: MotionScheme = MotionScheme.standard()
+    val scheme: MotionScheme = MotionScheme.standard(),
+    val style: MotionStyle = MotionStyle.standard()
 )
 
 /**
@@ -35,3 +37,11 @@ val MaterialTheme.motionScheme: MotionScheme
     @Composable
     @ReadOnlyComposable
     get() = LocalMotionTheme.current.scheme
+
+/**
+ * Access the current [MotionStyle] from the [MaterialTheme].
+ */
+val MaterialTheme.motionStyle: MotionStyle
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalMotionTheme.current.style

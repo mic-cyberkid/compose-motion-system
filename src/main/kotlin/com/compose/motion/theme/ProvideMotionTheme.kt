@@ -9,12 +9,32 @@ import androidx.compose.runtime.CompositionLocalProvider
  * This should be placed at the root of your application or around a specific sub-tree
  * to control the motion characteristics (standard vs expressive).
  *
- * @param theme The [MotionTheme] to provide. Defaults to [MotionThemeDefaults.Default].
+ * @param scheme The [MotionScheme] to use.
+ * @param style The [MotionStyle] to use.
  * @param content The composable content to provide the theme to.
  */
 @Composable
 fun ProvideMotionTheme(
-    theme: MotionTheme = MotionThemeDefaults.Default,
+    scheme: MotionScheme = MotionScheme.standard(),
+    style: MotionStyle = MotionStyle.standard(),
+    content: @Composable () -> Unit
+) {
+    val theme = MotionTheme(scheme = scheme, style = style)
+    CompositionLocalProvider(
+        LocalMotionTheme provides theme,
+        content = content
+    )
+}
+
+/**
+ * Provides a [MotionTheme] to the [content].
+ *
+ * @param theme The [MotionTheme] to provide.
+ * @param content The composable content to provide the theme to.
+ */
+@Composable
+fun ProvideMotionTheme(
+    theme: MotionTheme,
     content: @Composable () -> Unit
 ) {
     CompositionLocalProvider(
@@ -28,8 +48,17 @@ fun ProvideMotionTheme(
  */
 object MotionThemeDefaults {
     /** Standard motion theme, focused on productivity and subtle transitions. */
-    val Default = MotionTheme(scheme = MotionScheme.standard())
+    val Default = MotionTheme(scheme = MotionScheme.standard(), style = MotionStyle.standard())
 
     /** Expressive motion theme, using bouncy springs and fluid transitions. */
-    val Expressive = MotionTheme(scheme = MotionScheme.expressive())
+    val Expressive = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.standard())
+
+    /** Apple-style Glassmorphism theme. */
+    val AppleGlass = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.appleGlass())
+
+    /** Cyberpunk Glitch theme. */
+    val CyberGlitch = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.cyberGlitch())
+
+    /** Neumorphic theme. */
+    val Neumorphic = MotionTheme(scheme = MotionScheme.standard(), style = MotionStyle.neumorphic())
 }

@@ -14,17 +14,21 @@ dependencies {
 
 ## 2. Quick Start & Theme Setup
 
-Compose Motion is built to be a first-class extension of Material 3. To get started, wrap your application in `ProvideMotionTheme`. By default, it uses the **Standard** motion scheme.
+Compose Motion is built to be a first-class extension of Material 3. To get started, wrap your application in `ProvideMotionTheme`.
 
 ```kotlin
 import com.compose.motion.theme.ProvideMotionTheme
 import com.compose.motion.theme.MotionScheme
+import com.compose.motion.theme.MotionStyle
 
 @Composable
 fun App() {
     MaterialTheme {
-        // Provide the motion system to your app
-        ProvideMotionTheme(scheme = MotionScheme.standard()) {
+        // Provide the motion system and visual style to your app
+        ProvideMotionTheme(
+            scheme = MotionScheme.expressive(),
+            style = MotionStyle.appleGlass() // Modern UI Preset
+        ) {
             MainScreen()
         }
     }
@@ -32,14 +36,35 @@ fun App() {
 ```
 
 ### Accessing the Motion System
-You can access the current motion scheme anywhere in your composables via `MaterialTheme.motionScheme`.
+You can access the current motion scheme and visual style anywhere in your composables via `MaterialTheme`.
 
 ```kotlin
 val scheme = MaterialTheme.motionScheme
-val spatialSpec = scheme.defaultSpatialSpec<Float>()
+val style = MaterialTheme.motionStyle
 ```
 
-## 3. Motion Tokens (Durations, Springs, Easings)
+## 3. Modern UI Styles & Presets
+
+The `MotionStyle` framework allows you to swap entire visual aesthetics instantly.
+
+| Preset | Aesthetic | Key Features |
+| :--- | :--- | :--- |
+| **Apple Glass** | iOS-style Glassmorphism | High blur, subtle borders, specular highlights. |
+| **Cyber Glitch** | Sci-fi / Cyberpunk | Neon borders, digital distortion, low corner radius. |
+| **Neumorphic** | Soft UI | Double shadows, extruded surfaces, pill shapes. |
+| **Minimal Fluid** | Clean & Transparent | Zero shadows, high transparency, ultra-rounded. |
+
+### Using MotionSurface
+`MotionSurface` is a themed container that automatically applies the correct background, border, and effects based on the current `MotionStyle`.
+
+```kotlin
+MotionSurface(modifier = Modifier.size(200.dp)) {
+    // Automatically looks like Glass, Neumorphic, or Glitch based on theme
+    Text("Adaptive Content")
+}
+```
+
+## 4. Motion Tokens (Durations, Springs, Easings)
 
 Never hardcode durations or easings. Use the semantic tokens provided by the library.
 
@@ -55,7 +80,7 @@ Tokens follow the Material 3 naming convention:
 - `MotionEasings.Accelerate`: For exiting elements.
 - `MotionEasings.Decelerate`: For entering elements.
 
-## 4. Motion Schemes (Standard vs Expressive)
+## 5. Motion Schemes (Standard vs Expressive)
 
 The `MotionScheme` interface determines how tokens resolve to actual animation specs.
 
@@ -71,7 +96,7 @@ ProvideMotionTheme(scheme = MotionScheme.expressive()) {
 }
 ```
 
-## 5. Navigation Transitions & Shared Elements
+## 6. Navigation Transitions & Shared Elements
 
 `MotionNavHost` provides a drop-in replacement for standard Navigation that automatically handles themed transitions and shared elements.
 
@@ -105,60 +130,55 @@ motionComposable("details/{id}") {
 }
 ```
 
-## 6. Micro-interaction Modifiers
-
-These intent-based modifiers provide instant feedback with zero configuration.
+## 7. Micro-interaction Modifiers
 
 ### Selection & Feedback
 - `Modifier.scaleOnPress()`: Gently scales the element down when touched.
-- `Modifier.elevateOnPress()`: Increases shadow elevation on press.
 - `Modifier.tiltOnTouch()`: 3D parallax tilt based on touch position.
 - `Modifier.magneticPull()`: Attracts the element toward the touch point.
+- `Modifier.elasticDrag()`: Adds a "sticky" feel to dragged elements.
+
+### Lighting & Glass
+- `Modifier.glassmorphic()`: Applies background blur and specular edge highlights.
+- `Modifier.spotlight()`: A light source that follows the user's touch.
 
 ```kotlin
 Box(
     modifier = Modifier
         .size(100.dp)
-        .tiltOnTouch() // Interactive 3D tilt
-        .scaleOnPress() // Semantic feedback
-        .motionClickable { /* action */ }
+        .glassmorphic()
+        .spotlight() // Light follows finger
+        .scaleOnPress()
 )
 ```
 
-### Motion-Aware Modifiers
-- `Modifier.waveRipple()`: An organic, non-circular ripple effect.
-- `Modifier.spatialHover()`: Gentle floating effect for desktop/web.
+## 8. Visual Effects & Shaders
 
-## 7. Visual Effects
-
-High-performance visual enhancements that adapt to your theme.
-
-- `Modifier.shimmer()`: Standard skeleton loading effect.
 - `Modifier.glitch()`: Cyber-style digital distortion.
-- `Modifier.confetti()`: Particle burst effect (ideal for success states).
-- `Modifier.parallax(factor)`: Relative movement for layered backgrounds.
+- `Modifier.chromaticAberration()`: Realistic color fringing on touch or state change.
+- `Modifier.liquidDistortion()`: AGSL-powered fluid warping (API 33+).
+- `MagicExplosion(visible)`: A cinematic particle burst for celebrations.
+
+## 9. Animated Components & Layouts
+
+### Expressive Layouts
+- `MotionCarousel`: A horizontal pager with 3D and scale transformations.
+- `Modifier.revealOnScroll()`: Automatically animates elements as they enter the viewport.
 
 ```kotlin
-Image(
-    painter = painter,
-    modifier = Modifier.glitch(active = isError)
-)
+MotionCarousel(itemCount = 10) { page ->
+    Card { /* content */ }
+}
+
+// Staggered viewport entrance
+Modifier.revealOnScroll(direction = RevealDirection.Up)
 ```
 
-## 8. Animated Components
-
-Opinionated Material 3 components with built-in motion.
-
-### Containers
-- `MotionVisibility`: A theme-aware version of `AnimatedVisibility`.
-- `MotionContent`: Transition between different states of content.
-- `StaggeredEntrance(index)`: Applies a staggered entrance animation to its children based on the index.
-
 ### Specialized Components
-- `MotionCard`: A card that supports expansion and shared element bounds.
-- `LiquidProgressIndicator`: A fluid, organic alternative to standard progress bars.
-- `MotionText`: Text that animates character-by-character or via "typewriter" effect.
-- `AnimatedCounter`: Smoothly rolls numbers up or down.
+- `MotionSurface`: Adaptive themed container.
+- `LiquidProgressIndicator`: Organic progress wave.
+- `MotionText`: Animated character entrance.
+- `AnimatedCounter`: Smoothly rolling numbers.
 
 ```kotlin
 LiquidProgressIndicator(
@@ -167,9 +187,9 @@ LiquidProgressIndicator(
 )
 ```
 
-## 9. Launch Screen Animations
+## 10. Launch & Splash Screen Animations
 
-Replace the static system splash screen with pure Compose animations using `MotionLaunch`.
+Replace the static system splash screen with pure Compose animations using `MotionLaunch` or `SplashScreen`.
 
 ```kotlin
 @OptIn(ExperimentalMotionApi::class)
@@ -188,7 +208,7 @@ MotionLaunch(
 - `SplashStyle.BentoReveal`: Modern grid-based entrance.
 - `SplashStyle.OrganicMorph`: Fluid shape transformation.
 
-## 10. Advanced Usage & Best Practices
+## 11. Advanced Usage & Best Practices
 
 ### Performance Optimization
 - Use `Modifier.graphicsLayer` for any custom animations to ensure they run on the Render Thread.
@@ -199,10 +219,11 @@ MotionLaunch(
 - **Don't Overdo It**: Use **Expressive** for branding/onboarding and **Standard** for data-heavy utility screens.
 - **Modifier Ordering**: Always place `sharedElement` before layout modifiers like `padding` to ensure the bounds are captured correctly.
 
-## 11. Full Example Gallery
+## 12. Full Example Gallery
 
 Check out the `examples/` directory for ready-to-use implementations:
 - `NavigationSample.kt`: Full shared-element flow.
 - `InteractionSample.kt`: Mixing tilt, magnetic, and scale effects.
+- `ModernUIStylesSample.kt`: Showcase of Glass, Glitch, and Neumorphic themes.
 - `LaunchAnimationSample.kt`: Gallery of all splash styles.
 - `LoadingGallery.kt`: Shimmer, skeleton, and liquid progress examples.
