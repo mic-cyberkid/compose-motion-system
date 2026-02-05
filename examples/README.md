@@ -17,26 +17,30 @@ Experience `LiquidGlassMorph`, `AuroraGradient`, `BentoReveal`, and other futuri
 
 ---
 
-## 🎨 Advanced Animations & Effects
+## 🎨 Advanced Animations & Effects (New!)
 
-Compose Motion now includes 10+ new advanced effects categorized across three phases:
+Compose Motion now includes 20+ advanced effects categorized by priority:
 
-### Micro-interactions
-- **tiltOnTouch**: Rotates elements in 3D based on touch position.
-- **magneticPull**: Elements attract to the touch point for a tactile feel.
-- **shimmer**: Customizable skeleton loading shimmer effect.
-- **ConfettiBurst**: Celebratory particle burst triggered by state changes.
+### High Priority & Widely Requested
+- **particleTrail**: Follow the user's drag gesture with subtle glowing particles.
+- **dragMagneticFeedback**: Provide tactile feedback on drag handles by attracting toward the finger.
+- **scrollHeaderEffects**: Scale, blur, and scrim backgrounds dynamically as the user scrolls.
+- **StaggeredContentReveal**: Professional placeholder-to-content transition with crossfade.
+- **MeshGradient**: A subtle, breathing animated background that feels fluid and modern.
 
-### Layout Animations
-- **StaggeredEntrance**: sequential reveal for list items or layout blocks.
-- **parallax**: Scroll-aware position shifting for depth effects.
-- **LiquidProgressIndicator**: A wave-animated progress bar.
+### Polish & Delight
+- **FlipCard**: A high-quality 3D Y-axis flip component with perspective.
+- **spatialHover**: Add desktop-class hover effects (scale + glow) for tablets and foldables.
+- **AnimatedCounter**: Fluid sliding transitions for numeric values.
+- **PillMorphRow**: A tab indicator that morphs shape and position between selections.
+- **ExpandableText**: Smooth inline expansion with gradient fade.
+- **ProfileRipple**: A breathing radial pulse around circular elements like avatars.
 
-### Creative Effects
-- **glitch**: Cyber-modern visual distortion effect.
-- **waveRipple**: Custom touch-triggered circular wave expansion.
-- **MotionText**: Character-by-character animated text reveal.
-- **DepthZoom**: A cinematic navigation transition where screens scale and fade in depth.
+### Creative & Experimental
+- **MagicExplosion**: Physics-based particle burst for "likes" or celebrations.
+- **liquidDistortion**: AGSL-powered liquid ripple distortion (API 33+).
+- **MotionText (Kinetic)**: Characters squash and bounce into place on entrance.
+- **overscrollGlow**: Chromatic aberration glow effect triggered at layout boundaries.
 
 ---
 
@@ -72,19 +76,9 @@ fun InteractiveButton(onClick: () -> Unit) {
             .scaleOnPress()      // Subtle shrink when pressed
             .elevateOnPress()    // Increase shadow when pressed
             .tiltOnTouch()       // 3D Tilt feedback
+            .particleTrail()     // Follow drag with particles
     ) {
         Text("Press Me", color = Color.White, modifier = Alignment.Center)
     }
 }
-```
-
----
-
-## 🛠️ Project Setup for Samples
-
-To run these samples, ensure you have the following dependencies in your `libs.versions.toml` or `build.gradle.kts`:
-
-```toml
-[libraries]
-compose-motion = { group = "com.compose.motion", name = "compose-motion", version = "0.1.0" }
 ```
