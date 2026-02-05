@@ -25,17 +25,6 @@ import com.compose.motion.theme.MotionScheme
 /**
  * A themed alternative to [NavHost] that provides built-in support for [MotionTransition]
  * and shared element transitions.
- *
- * It automatically wraps the content in a [SharedTransitionLayout] and provides
- * [LocalSharedTransitionScope] and [LocalAnimatedVisibilityScope] down the tree,
- * enabling easy use of [Modifier.sharedElement].
- *
- * @param navController The [NavHostController] for the host.
- * @param startDestination The route for the start destination.
- * @param modifier Modifier for the container.
- * @param transition The default [MotionTransition] to use for all destinations.
- *                   Defaults to [MotionTransition.SharedAxisX].
- * @param content The [NavGraphBuilder] used to build the graph.
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -53,28 +42,17 @@ fun MotionNavHost(
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
-                enterTransition = {
-                    getEnterTransition(transition, scheme)
-                },
-                exitTransition = {
-                    getExitTransition(transition, scheme)
-                },
-                popEnterTransition = {
-                    getPopEnterTransition(transition, scheme)
-                },
-                popExitTransition = {
-                    getPopExitTransition(transition, scheme)
-                },
+                enterTransition = { getEnterTransition(transition, scheme) },
+                exitTransition = { getExitTransition(transition, scheme) },
+                popEnterTransition = { getPopEnterTransition(transition, scheme) },
+                popExitTransition = { getPopExitTransition(transition, scheme) },
                 builder = content
             )
         }
     }
 }
 
-private fun getEnterTransition(
-    transition: MotionTransition,
-    scheme: MotionScheme
-): EnterTransition {
+private fun getEnterTransition(transition: MotionTransition, scheme: MotionScheme): EnterTransition {
     return when (transition) {
         MotionTransition.Fade -> fadeIn(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.Slide -> slideInHorizontally(animationSpec = scheme.defaultSpatialSpec()) { it }
@@ -84,13 +62,12 @@ private fun getEnterTransition(
                                      fadeIn(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.ContainerTransform -> fadeIn(animationSpec = scheme.fastEffectsSpec()) +
                                               scaleIn(initialScale = 0.85f, animationSpec = scheme.defaultSpatialSpec())
+        MotionTransition.DepthZoom -> scaleIn(initialScale = 0.8f, animationSpec = scheme.slowSpatialSpec()) +
+                                     fadeIn(animationSpec = scheme.slowEffectsSpec())
     }
 }
 
-private fun getExitTransition(
-    transition: MotionTransition,
-    scheme: MotionScheme
-): ExitTransition {
+private fun getExitTransition(transition: MotionTransition, scheme: MotionScheme): ExitTransition {
     return when (transition) {
         MotionTransition.Fade -> fadeOut(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.Slide -> slideOutHorizontally(animationSpec = scheme.defaultSpatialSpec()) { -it }
@@ -100,13 +77,12 @@ private fun getExitTransition(
                                      fadeOut(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.ContainerTransform -> fadeOut(animationSpec = scheme.fastEffectsSpec()) +
                                               scaleOut(targetScale = 0.85f, animationSpec = scheme.defaultSpatialSpec())
+        MotionTransition.DepthZoom -> scaleOut(targetScale = 1.2f, animationSpec = scheme.slowSpatialSpec()) +
+                                     fadeOut(animationSpec = scheme.slowEffectsSpec())
     }
 }
 
-private fun getPopEnterTransition(
-    transition: MotionTransition,
-    scheme: MotionScheme
-): EnterTransition {
+private fun getPopEnterTransition(transition: MotionTransition, scheme: MotionScheme): EnterTransition {
     return when (transition) {
         MotionTransition.Fade -> fadeIn(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.Slide -> slideInHorizontally(animationSpec = scheme.defaultSpatialSpec()) { -it }
@@ -116,21 +92,21 @@ private fun getPopEnterTransition(
                                      fadeIn(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.ContainerTransform -> fadeIn(animationSpec = scheme.fastEffectsSpec()) +
                                               scaleIn(initialScale = 0.85f, animationSpec = scheme.defaultSpatialSpec())
+        MotionTransition.DepthZoom -> scaleIn(initialScale = 1.2f, animationSpec = scheme.slowSpatialSpec()) +
+                                     fadeIn(animationSpec = scheme.slowEffectsSpec())
     }
 }
 
-private fun getPopExitTransition(
-    transition: MotionTransition,
-    scheme: MotionScheme
-): ExitTransition {
+private fun getPopExitTransition(transition: MotionTransition, scheme: MotionScheme): ExitTransition {
     return when (transition) {
-        MotionTransition.Fade -> fadeOut(animationSpec = scheme.fastEffectsSpec())
-        MotionTransition.Slide -> slideOutHorizontally(animationSpec = scheme.defaultSpatialSpec()) { it }
         MotionTransition.SharedAxisX -> slideOutHorizontally(animationSpec = scheme.defaultSpatialSpec()) { it / 3 } +
                                      fadeOut(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.SharedAxisY -> slideOutVertically(animationSpec = scheme.defaultSpatialSpec()) { it / 3 } +
                                      fadeOut(animationSpec = scheme.fastEffectsSpec())
         MotionTransition.ContainerTransform -> fadeOut(animationSpec = scheme.fastEffectsSpec()) +
                                               scaleOut(targetScale = 0.85f, animationSpec = scheme.defaultSpatialSpec())
+        MotionTransition.DepthZoom -> scaleOut(targetScale = 0.8f, animationSpec = scheme.slowSpatialSpec()) +
+                                     fadeOut(animationSpec = scheme.slowEffectsSpec())
+        else -> fadeOut(animationSpec = scheme.fastEffectsSpec())
     }
 }

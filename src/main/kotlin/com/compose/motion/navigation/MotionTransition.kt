@@ -29,4 +29,9 @@ sealed class MotionTransition {
      * For best results, use this in conjunction with [Modifier.sharedElement].
      */
     object ContainerTransform : MotionTransition()
+
+    /**
+     * Depth zoom transition: old screen shrinks and fades while the new one grows.
+     */
+    object DepthZoom : MotionTransition()
 }

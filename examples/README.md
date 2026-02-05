@@ -17,6 +17,29 @@ Experience `LiquidGlassMorph`, `AuroraGradient`, `BentoReveal`, and other futuri
 
 ---
 
+## 🎨 Advanced Animations & Effects
+
+Compose Motion now includes 10+ new advanced effects categorized across three phases:
+
+### Micro-interactions
+- **tiltOnTouch**: Rotates elements in 3D based on touch position.
+- **magneticPull**: Elements attract to the touch point for a tactile feel.
+- **shimmer**: Customizable skeleton loading shimmer effect.
+- **ConfettiBurst**: Celebratory particle burst triggered by state changes.
+
+### Layout Animations
+- **StaggeredEntrance**: sequential reveal for list items or layout blocks.
+- **parallax**: Scroll-aware position shifting for depth effects.
+- **LiquidProgressIndicator**: A wave-animated progress bar.
+
+### Creative Effects
+- **glitch**: Cyber-modern visual distortion effect.
+- **waveRipple**: Custom touch-triggered circular wave expansion.
+- **MotionText**: Character-by-character animated text reveal.
+- **DepthZoom**: A cinematic navigation transition where screens scale and fade in depth.
+
+---
+
 ## 📖 Guided Examples
 
 ### Setting Up the Theme
@@ -48,29 +71,10 @@ fun InteractiveButton(onClick: () -> Unit) {
             .motionClickable(onClick = onClick)
             .scaleOnPress()      // Subtle shrink when pressed
             .elevateOnPress()    // Increase shadow when pressed
+            .tiltOnTouch()       // 3D Tilt feedback
     ) {
         Text("Press Me", color = Color.White, modifier = Alignment.Center)
     }
-}
-```
-
-### Futuristic Launch Presets
-
-Compose Motion includes several 2026-ready launch animations:
-
-- `LaunchStyle.HolographicPulse`: Chromatic aberration and soft glow.
-- `LaunchStyle.OrbitalConverge`: Kinetic particles orbiting your logo.
-- `LaunchStyle.LiquidGlassMorph`: Frosted glass morphing into view.
-- `LaunchStyle.AuroraGradient`: Flowing aurora background.
-- `LaunchStyle.BentoReveal`: Staggered grid cell reveal.
-- `LaunchStyle.MatrixRain`: Cyberpunk digital rain trails.
-
-```kotlin
-MotionLaunch(
-    visible = isLoading,
-    style = LaunchStyle.BentoReveal
-) {
-    Logo()
 }
 ```
 
