@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.compose.motion.ExperimentalMotionApi
 import com.compose.motion.launch.LaunchStyle
 import com.compose.motion.launch.MotionLaunch
 import com.compose.motion.theme.ProvideMotionTheme
@@ -17,6 +18,7 @@ import kotlinx.coroutines.delay
 /**
  * A comprehensive sample showing multiple futuristic Launch Animation styles.
  */
+@OptIn(ExperimentalMotionApi::class)
 @Composable
 fun LaunchAnimationSample() {
     var showLaunch by remember { mutableStateOf(true) }

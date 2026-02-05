@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.compose.motion.ExperimentalMotionApi
 import com.compose.motion.theme.motionScheme
 import kotlin.math.cos
 import kotlin.math.sin
@@ -33,10 +34,11 @@ import kotlin.math.sin
 /**
  * A pure-Compose launch animation container.
  */
+@ExperimentalMotionApi
 @Composable
 fun MotionLaunch(
     visible: Boolean,
-    style: LaunchStyle = LaunchStyle.FadeScale,
+    style: SplashStyle = SplashStyle.FadeScale,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable () -> Unit
@@ -45,13 +47,13 @@ fun MotionLaunch(
 
     AnimatedVisibility(
         visible = visible,
-        enter = if (style == LaunchStyle.None) androidx.compose.animation.EnterTransition.None else fadeIn(animationSpec = scheme.slowEffectsSpec()),
+        enter = if (style == SplashStyle.None) androidx.compose.animation.EnterTransition.None else fadeIn(animationSpec = scheme.slowEffectsSpec()),
         exit = when (style) {
-            LaunchStyle.None -> androidx.compose.animation.ExitTransition.None
-            LaunchStyle.Fade -> fadeOut(animationSpec = scheme.slowEffectsSpec())
-            LaunchStyle.FadeScale -> fadeOut(animationSpec = scheme.slowEffectsSpec()) +
+            SplashStyle.None -> androidx.compose.animation.ExitTransition.None
+            SplashStyle.Fade -> fadeOut(animationSpec = scheme.slowEffectsSpec())
+            SplashStyle.FadeScale -> fadeOut(animationSpec = scheme.slowEffectsSpec()) +
                                    scaleOut(targetScale = 1.1f, animationSpec = scheme.slowSpatialSpec())
-            LaunchStyle.SlideUp -> slideOutVertically(animationSpec = scheme.slowSpatialSpec()) { -it } +
+            SplashStyle.SlideUp -> slideOutVertically(animationSpec = scheme.slowSpatialSpec()) { -it } +
                                  fadeOut(animationSpec = scheme.slowEffectsSpec())
             else ->
                 fadeOut(animationSpec = scheme.slowEffectsSpec()) +
@@ -66,16 +68,16 @@ fun MotionLaunch(
             contentAlignment = Alignment.Center
         ) {
             when (style) {
-                LaunchStyle.HolographicPulse -> HolographicEffect(content = content)
-                LaunchStyle.OrbitalConverge -> OrbitalEffect(content = content)
-                LaunchStyle.LiquidGlassMorph -> LiquidGlassEffect(content = content)
-                LaunchStyle.AuroraGradient -> AuroraEffect(content = content)
-                LaunchStyle.KineticScan -> ScanEffect(content = content)
-                LaunchStyle.GlowPulse -> GlowPulseEffect(content = content)
-                LaunchStyle.MatrixRain -> MatrixEffect(content = content)
-                LaunchStyle.BentoReveal -> BentoEffect(content = content)
-                LaunchStyle.GlassReveal -> GlassRevealEffect(content = content)
-                LaunchStyle.OrganicMorph -> OrganicEffect(content = content)
+                SplashStyle.HolographicPulse -> HolographicEffect(content = content)
+                SplashStyle.OrbitalConverge -> OrbitalEffect(content = content)
+                SplashStyle.LiquidGlassMorph -> LiquidGlassEffect(content = content)
+                SplashStyle.AuroraGradient -> AuroraEffect(content = content)
+                SplashStyle.KineticScan -> ScanEffect(content = content)
+                SplashStyle.GlowPulse -> GlowPulseEffect(content = content)
+                SplashStyle.MatrixRain -> MatrixEffect(content = content)
+                SplashStyle.BentoReveal -> BentoEffect(content = content)
+                SplashStyle.GlassReveal -> GlassRevealEffect(content = content)
+                SplashStyle.OrganicMorph -> OrganicEffect(content = content)
                 else -> content()
             }
         }
