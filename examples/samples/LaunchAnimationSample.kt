@@ -45,12 +45,13 @@ fun LaunchAnimationSample() {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(onClick = { currentStyle = LaunchStyle.LiquidGlassMorph }, modifier = Modifier.padding(4.dp)) { Text("Liquid Glass") }
+                    Button(onClick = { currentStyle = LaunchStyle.GlassReveal }, modifier = Modifier.padding(4.dp)) { Text("Glass Reveal") }
+                    Button(onClick = { currentStyle = LaunchStyle.OrganicMorph }, modifier = Modifier.padding(4.dp)) { Text("Organic Morph") }
                     Button(onClick = { currentStyle = LaunchStyle.HolographicPulse }, modifier = Modifier.padding(4.dp)) { Text("Holographic") }
                     Button(onClick = { currentStyle = LaunchStyle.OrbitalConverge }, modifier = Modifier.padding(4.dp)) { Text("Orbital") }
                     Button(onClick = { currentStyle = LaunchStyle.AuroraGradient }, modifier = Modifier.padding(4.dp)) { Text("Aurora") }
                     Button(onClick = { currentStyle = LaunchStyle.BentoReveal }, modifier = Modifier.padding(4.dp)) { Text("Bento") }
                     Button(onClick = { currentStyle = LaunchStyle.MatrixRain }, modifier = Modifier.padding(4.dp)) { Text("Matrix") }
-                    Button(onClick = { currentStyle = LaunchStyle.GlowPulse }, modifier = Modifier.padding(4.dp)) { Text("Glow Pulse") }
                 }
             }
 
