@@ -11,17 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.compose.motion.launch.LaunchStyle
+import com.compose.motion.ExperimentalMotionApi
+import com.compose.motion.launch.SplashStyle
 import com.compose.motion.launch.MotionLaunch
 import com.compose.motion.theme.ProvideMotionTheme
 
+@OptIn(ExperimentalMotionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun HolographicLaunchPreview() {
     ProvideMotionTheme {
         MotionLaunch(
             visible = true,
-            style = LaunchStyle.HolographicPulse,
+            style = SplashStyle.HolographicPulse,
             backgroundColor = Color.Black
         ) {
             Box(
@@ -33,13 +35,14 @@ fun HolographicLaunchPreview() {
     }
 }
 
+@OptIn(ExperimentalMotionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun OrbitalLaunchPreview() {
     ProvideMotionTheme {
         MotionLaunch(
             visible = true,
-            style = LaunchStyle.OrbitalConverge,
+            style = SplashStyle.OrbitalConverge,
             backgroundColor = Color(0xFF0D0D0D)
         ) {
             Box(
@@ -51,13 +54,14 @@ fun OrbitalLaunchPreview() {
     }
 }
 
+@OptIn(ExperimentalMotionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun LiquidGlassLaunchPreview() {
     ProvideMotionTheme {
         MotionLaunch(
             visible = true,
-            style = LaunchStyle.LiquidGlassMorph,
+            style = SplashStyle.LiquidGlassMorph,
             backgroundColor = Color(0xFF1A1A1A)
         ) {
             Box(
@@ -69,13 +73,14 @@ fun LiquidGlassLaunchPreview() {
     }
 }
 
+@OptIn(ExperimentalMotionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun AuroraLaunchPreview() {
     ProvideMotionTheme {
         MotionLaunch(
             visible = true,
-            style = LaunchStyle.AuroraGradient
+            style = SplashStyle.AuroraGradient
         ) {
             Box(
                 modifier = Modifier
@@ -86,13 +91,14 @@ fun AuroraLaunchPreview() {
     }
 }
 
+@OptIn(ExperimentalMotionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MatrixLaunchPreview() {
     ProvideMotionTheme {
         MotionLaunch(
             visible = true,
-            style = LaunchStyle.MatrixRain,
+            style = SplashStyle.MatrixRain,
             backgroundColor = Color.Black
         ) {
             Box(
@@ -104,13 +110,14 @@ fun MatrixLaunchPreview() {
     }
 }
 
+@OptIn(ExperimentalMotionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun BentoLaunchPreview() {
     ProvideMotionTheme {
         MotionLaunch(
             visible = true,
-            style = LaunchStyle.BentoReveal
+            style = SplashStyle.BentoReveal
         ) {
             Box(
                 modifier = Modifier
