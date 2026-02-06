@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +19,7 @@ import com.compose.motion.theme.MotionStyle
 import com.compose.motion.theme.ProvideMotionTheme
 import com.compose.motion.theme.MotionScheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModernUIStylesSample() {
     var selectedStyle by remember { mutableStateOf(MotionStyle.standard()) }
@@ -110,7 +113,7 @@ fun ModernUIStylesSample() {
 private fun StyleSelector(onStyleSelected: (MotionStyle) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     IconButton(onClick = { expanded = true }) {
-        Icon(androidx.compose.material.icons.Icons.Default.Settings, contentDescription = "Styles")
+        Icon(Icons.Default.Settings, contentDescription = "Styles")
     }
     DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
         DropdownMenuItem(text = { Text("Standard") }, onClick = { onStyleSelected(MotionStyle.standard()); expanded = false })
