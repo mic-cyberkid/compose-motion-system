@@ -10,19 +10,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.compose.motion.ExperimentalMotionApi
-import com.compose.motion.launch.LaunchStyle
+import com.compose.motion.launch.SplashStyle
 import com.compose.motion.launch.MotionLaunch
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import com.compose.motion.theme.ProvideMotionTheme
 import kotlinx.coroutines.delay
 
 /**
  * A comprehensive sample showing multiple futuristic Launch Animation styles.
  */
-@OptIn(ExperimentalMotionApi::class)
+@OptIn(ExperimentalMotionApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun LaunchAnimationSample() {
     var showLaunch by remember { mutableStateOf(true) }
-    var currentStyle by remember { mutableStateOf<LaunchStyle>(LaunchStyle.LiquidGlassMorph) }
+    var currentStyle by remember { mutableStateOf<SplashStyle>(SplashStyle.LiquidGlassMorph) }
 
     // Re-trigger launch when style changes for demo purposes
     LaunchedEffect(currentStyle) {
@@ -46,14 +47,14 @@ fun LaunchAnimationSample() {
                     horizontalArrangement = Arrangement.Center,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(onClick = { currentStyle = LaunchStyle.LiquidGlassMorph }, modifier = Modifier.padding(4.dp)) { Text("Liquid Glass") }
-                    Button(onClick = { currentStyle = LaunchStyle.GlassReveal }, modifier = Modifier.padding(4.dp)) { Text("Glass Reveal") }
-                    Button(onClick = { currentStyle = LaunchStyle.OrganicMorph }, modifier = Modifier.padding(4.dp)) { Text("Organic Morph") }
-                    Button(onClick = { currentStyle = LaunchStyle.HolographicPulse }, modifier = Modifier.padding(4.dp)) { Text("Holographic") }
-                    Button(onClick = { currentStyle = LaunchStyle.OrbitalConverge }, modifier = Modifier.padding(4.dp)) { Text("Orbital") }
-                    Button(onClick = { currentStyle = LaunchStyle.AuroraGradient }, modifier = Modifier.padding(4.dp)) { Text("Aurora") }
-                    Button(onClick = { currentStyle = LaunchStyle.BentoReveal }, modifier = Modifier.padding(4.dp)) { Text("Bento") }
-                    Button(onClick = { currentStyle = LaunchStyle.MatrixRain }, modifier = Modifier.padding(4.dp)) { Text("Matrix") }
+                    Button(onClick = { currentStyle = SplashStyle.LiquidGlassMorph }, modifier = Modifier.padding(4.dp)) { Text("Liquid Glass") }
+                    Button(onClick = { currentStyle = SplashStyle.GlassReveal }, modifier = Modifier.padding(4.dp)) { Text("Glass Reveal") }
+                    Button(onClick = { currentStyle = SplashStyle.OrganicMorph }, modifier = Modifier.padding(4.dp)) { Text("Organic Morph") }
+                    Button(onClick = { currentStyle = SplashStyle.HolographicPulse }, modifier = Modifier.padding(4.dp)) { Text("Holographic") }
+                    Button(onClick = { currentStyle = SplashStyle.OrbitalConverge }, modifier = Modifier.padding(4.dp)) { Text("Orbital") }
+                    Button(onClick = { currentStyle = SplashStyle.AuroraGradient }, modifier = Modifier.padding(4.dp)) { Text("Aurora") }
+                    Button(onClick = { currentStyle = SplashStyle.BentoReveal }, modifier = Modifier.padding(4.dp)) { Text("Bento") }
+                    Button(onClick = { currentStyle = SplashStyle.MatrixRain }, modifier = Modifier.padding(4.dp)) { Text("Matrix") }
                 }
             }
 
@@ -61,7 +62,7 @@ fun LaunchAnimationSample() {
             MotionLaunch(
                 visible = showLaunch,
                 style = currentStyle,
-                backgroundColor = if (currentStyle == LaunchStyle.AuroraGradient || currentStyle == LaunchStyle.MatrixRain) Color.Transparent else Color(0xFF121212)
+                backgroundColor = if (currentStyle == SplashStyle.AuroraGradient || currentStyle == SplashStyle.MatrixRain) Color.Transparent else Color(0xFF121212)
             ) {
                 Box(
                     modifier = Modifier
