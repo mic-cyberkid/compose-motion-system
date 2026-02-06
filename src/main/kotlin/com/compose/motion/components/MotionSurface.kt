@@ -13,16 +13,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.compose.motion.modifiers.glassmorphic
+import com.compose.motion.modifiers.*
 import com.compose.motion.effects.glitch
-import com.compose.motion.theme.MotionStyle
+import com.compose.motion.theme.*
 import com.compose.motion.theme.motionStyle
-import com.compose.motion.theme.StandardMotionStyle
-import com.compose.motion.theme.AppleGlassStyle
-import com.compose.motion.theme.CyberGlitchStyle
-import com.compose.motion.theme.MinimalFluidStyle
-import com.compose.motion.theme.NeumorphicStyle
-
 /**
  * A flexible surface that automatically adapts its visual treatment
  * based on the current [MotionStyle].
@@ -45,6 +39,23 @@ fun MotionSurface(
                     is NeumorphicStyle -> Modifier
                         .shadow(style.shadowElevation, actualShape)
                         .background(color, actualShape)
+                    is AuraGlassStyle, is AuraEmeraldStyle -> Modifier.glassmorphic(actualShape, blurRadius = style.blurRadius)
+                    is AuraNeumorphicStyle, is TactileNeumorphicStyle -> Modifier
+                        .neumorphic(
+                            shape = actualShape,
+                            lightShadowColor = Color.White.copy(alpha = 0.05f),
+                            darkShadowColor = Color.Black.copy(alpha = 0.4f),
+                            shadowElevation = style.shadowElevation
+                        )
+                        .background(color, actualShape)
+                    is VisionOSStyle -> Modifier
+                        .glassmorphic(actualShape, blurRadius = style.blurRadius)
+                        .chromaticBorder(actualShape)
+                        .chromaticAberration(intensity = 0.1f)
+                    is ChromaticLiquidStyle -> Modifier
+                        .glassmorphic(actualShape)
+                        .chromaticBorder(actualShape, intensity = 1.2f)
+                        .liquidDistortion(intensity = 0.3f)
                     is CyberGlitchStyle -> Modifier
                         .border(1.dp, style.primaryColorOverride ?: Color.Cyan, actualShape)
                         .glitch(intensity = 0.2f)
