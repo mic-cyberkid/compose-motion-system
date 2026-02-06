@@ -12,10 +12,8 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -118,6 +116,44 @@ fun Modifier.spotlight(
                 radius = radius.toPx(),
                 center = animatedPos
             )
+        }
+    }
+}
+
+/**
+ * Adds a chromatic border effect with multiple colored glows.
+ *
+ * @param shape The shape of the surface.
+ * @param intensity The intensity of the chromatic effect.
+ */
+fun Modifier.chromaticBorder(
+    shape: Shape,
+    intensity: Float = 1.0f
+): Modifier = drawBehind {
+    val strokeWidth = 2.dp.toPx()
+    val colors = listOf(
+        Color(0xFFFF00FF).copy(alpha = 0.2f * intensity), // Magenta
+        Color(0xFF00FFFF).copy(alpha = 0.2f * intensity), // Cyan
+        Color(0xFFFFFF00).copy(alpha = 0.2f * intensity)  // Yellow
+    )
+
+    val outline = shape.createOutline(size, layoutDirection, this)
+
+    drawIntoCanvas { canvas ->
+        val paint = Paint()
+        val frameworkPaint = paint.asFrameworkPaint()
+        frameworkPaint.style = android.graphics.Paint.Style.STROKE
+        frameworkPaint.strokeWidth = strokeWidth
+
+        colors.forEachIndexed { index, color ->
+            val offset = (index - 1) * 2f
+            frameworkPaint.color = color.toArgb()
+            frameworkPaint.setMaskFilter(android.graphics.BlurMaskFilter(4f * intensity, android.graphics.BlurMaskFilter.Blur.NORMAL))
+
+            canvas.save()
+            canvas.translate(offset, offset)
+            canvas.drawOutline(outline, paint)
+            canvas.restore()
         }
     }
 }

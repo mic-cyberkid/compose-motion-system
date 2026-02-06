@@ -61,4 +61,22 @@ object MotionThemeDefaults {
 
     /** Neumorphic theme. */
     val Neumorphic = MotionTheme(scheme = MotionScheme.standard(), style = MotionStyle.neumorphic())
+
+    /** Aura Finance Glass theme. */
+    val AuraGlass = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.auraGlass())
+
+    /** Aura Finance Emerald theme. */
+    val AuraEmerald = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.auraEmerald())
+
+    /** Aura Finance Neumorphic theme. */
+    val AuraNeumorphic = MotionTheme(scheme = MotionScheme.standard(), style = MotionStyle.auraNeumorphic())
+
+    /** Tactile Neumorphic theme. */
+    val TactileNeumorphic = MotionTheme(scheme = MotionScheme.standard(), style = MotionStyle.tactileNeumorphic())
+
+    /** visionOS-inspired theme. */
+    val VisionOS = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.visionOS())
+
+    /** Chromatic Liquid theme. */
+    val ChromaticLiquid = MotionTheme(scheme = MotionScheme.expressive(), style = MotionStyle.chromaticLiquid())
 }

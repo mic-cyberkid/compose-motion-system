@@ -1,5 +1,6 @@
 package com.compose.motion.examples
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,6 +26,7 @@ fun ModernUIStylesSample() {
         style = selectedStyle
     ) {
         Scaffold(
+            containerColor = selectedStyle.backgroundColor,
             topBar = {
                 TopAppBar(
                     title = { Text("Modern UI Styles") },
@@ -34,56 +36,68 @@ fun ModernUIStylesSample() {
                 )
             }
         ) { padding ->
-            LazyColumn(
-                modifier = Modifier.padding(padding).fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(
+                        selectedStyle.backgroundBrush?.let {
+                            Modifier.background(it)
+                        } ?: Modifier.background(selectedStyle.backgroundColor)
+                    )
             ) {
-                item {
-                    Text("Interactive Carousel", style = MaterialTheme.typography.titleMedium)
-                    MotionCarousel(itemCount = 5, modifier = Modifier.height(200.dp)) { index ->
-                        MotionSurface(modifier = Modifier.fillMaxSize()) {
-                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                Text("Page $index", style = MaterialTheme.typography.headlineMedium)
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    item {
+                        Text("Interactive Carousel", style = MaterialTheme.typography.titleMedium)
+                        MotionCarousel(itemCount = 5, modifier = Modifier.height(200.dp)) { index ->
+                            MotionSurface(modifier = Modifier.fillMaxSize()) {
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                    Text("Page $index", style = MaterialTheme.typography.headlineMedium)
+                                }
                             }
                         }
                     }
-                }
 
-                item {
-                    Text("Advanced Gestures", style = MaterialTheme.typography.titleMedium)
-                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        MotionSurface(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .elasticDrag()
-                        ) {
-                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                Text("Drag Me", style = MaterialTheme.typography.labelSmall)
+                    item {
+                        Text("Advanced Gestures", style = MaterialTheme.typography.titleMedium)
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            MotionSurface(
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .elasticDrag()
+                            ) {
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                    Text("Drag Me", style = MaterialTheme.typography.labelSmall)
+                                }
                             }
-                        }
 
-                        MotionSurface(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .spotlight()
-                        ) {
-                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                Text("Spotlight", style = MaterialTheme.typography.labelSmall)
+                            MotionSurface(
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .spotlight()
+                            ) {
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                    Text("Spotlight", style = MaterialTheme.typography.labelSmall)
+                                }
                             }
                         }
                     }
-                }
 
-                itemsIndexed(List(10) { "Scrolling Item $it" }) { index, item ->
-                    MotionSurface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                            .revealOnScroll(direction = if (index % 2 == 0) RevealDirection.Right else RevealDirection.Left)
-                    ) {
-                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                            Text(item)
+                    itemsIndexed(List(10) { "Scrolling Item $it" }) { index, item ->
+                        MotionSurface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(100.dp)
+                                .revealOnScroll(direction = if (index % 2 == 0) RevealDirection.Right else RevealDirection.Left)
+                        ) {
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                Text(item)
+                            }
                         }
                     }
                 }
@@ -104,5 +118,14 @@ private fun StyleSelector(onStyleSelected: (MotionStyle) -> Unit) {
         DropdownMenuItem(text = { Text("Cyber Glitch") }, onClick = { onStyleSelected(MotionStyle.cyberGlitch()); expanded = false })
         DropdownMenuItem(text = { Text("Neumorphic") }, onClick = { onStyleSelected(MotionStyle.neumorphic()); expanded = false })
         DropdownMenuItem(text = { Text("Minimal Fluid") }, onClick = { onStyleSelected(MotionStyle.minimalFluid()); expanded = false })
+
+        HorizontalDivider()
+
+        DropdownMenuItem(text = { Text("Aura Glass") }, onClick = { onStyleSelected(MotionStyle.auraGlass()); expanded = false })
+        DropdownMenuItem(text = { Text("Aura Emerald") }, onClick = { onStyleSelected(MotionStyle.auraEmerald()); expanded = false })
+        DropdownMenuItem(text = { Text("Aura Neumorphic") }, onClick = { onStyleSelected(MotionStyle.auraNeumorphic()); expanded = false })
+        DropdownMenuItem(text = { Text("Tactile Neumorphic") }, onClick = { onStyleSelected(MotionStyle.tactileNeumorphic()); expanded = false })
+        DropdownMenuItem(text = { Text("visionOS") }, onClick = { onStyleSelected(MotionStyle.visionOS()); expanded = false })
+        DropdownMenuItem(text = { Text("Chromatic Liquid") }, onClick = { onStyleSelected(MotionStyle.chromaticLiquid()); expanded = false })
     }
 }
